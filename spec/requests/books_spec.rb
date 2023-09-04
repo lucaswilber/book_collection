@@ -19,15 +19,20 @@ RSpec.describe "/books", type: :request do
   # adjust the attributes here as well.
   let(:valid_attributes) {
     {
-      "title" => Book.create(:title),
-      "author" => Book.create(:author),
-      "price" => Book.create(:price),
-      "published" => Book.create(:published)
+      "title" => 'The Hobbit',
+      "author" => 'J.K. Rowling',
+      "price" => 12.34,
+      "published" => Date.today
     }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      "title" => '',
+      "author" => '',
+      "price" => 'string',
+      "published" => 'not a date'
+    }
   }
 
   describe "GET /index" do
@@ -94,14 +99,20 @@ RSpec.describe "/books", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          "title" => 'The Lord of the Rings',
+          "author" => 'J.K. Rowling',
+          "price" => 43.21,
+          "published" => Date.today
+        }
       }
 
       it "updates the requested book" do
         book = Book.create! valid_attributes
         patch book_url(book), params: { book: new_attributes }
         book.reload
-        skip("Add assertions for updated state")
+        assert_equal('The Lord of the Rings', book.title)
+        assert_equal(43.21, book.price)
       end
 
       it "redirects to the book" do
